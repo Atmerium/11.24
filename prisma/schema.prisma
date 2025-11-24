@@ -14,3 +14,39 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User{
+  id Int @id @default(autoincrement())
+  email String @unique
+  favoriteMusics Music[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+enum Genre {
+  rock
+  classic
+  pop
+}
+
+model Music{
+  id Int @id @default(autoincrement())
+  title String
+  length Int
+  genre Genre
+  album Album? @relation(fields: [albumId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  albumId Int?
+  favoritedBy User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album{
+  id Int @id @default(autoincrement())
+  title String
+  musics Music[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
